@@ -1,45 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
+  <meta charset="UTF-8">
   <title>구글 앱스 스크립트로 정보 전달</title>
-  <script>
-    function submitForm(event) {
-      event.preventDefault();
-
-      const email = document.getElementById("email").value;
-      const name = document.getElementById("name").value;
-      const message = document.getElementById("message").value;
-
-      fetch("https://script.google.com/macros/s/AKfycbyXmG2id0Hz_XeCNozcuQnF1-7uS3OgsLHobuG9W8IxrZV9Fo7gdJV574lqREFgCdxY7g/exec", {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: `email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&message=${encodeURIComponent(message)}`
-      })
-      .then(response => {
-        alert("정보가 성공적으로 전송되었습니다!");
-      })
-      .catch(error => {
-        alert("전송 실패: " + error.message);
-      });
-    }
-  </script>
+  
+  <!-- 외부 CSS 연결 (form.css 파일) -->
+  <link rel="stylesheet" href="form.css">
 </head>
 <body>
-  <h2>정보 제출 폼</h2>
-  <form onsubmit="submitForm(event)">
-    <label for="email">이메일:</label><br>
-    <input type="email" id="email" name="email" required><br><br>
+  <!-- 전체 폼을 감싸는 중앙 정렬용 컨테이너 -->
+  <div class="form-container">
+    <h2>구글 앱스 스크립트로 정보 전달</h2>
 
-    <label for="name">이름:</label><br>
-    <input type="text" id="name" name="name" required><br><br>
+    <!-- 제출 시 Google Apps Script 웹앱으로 전송 -->
+    <form action="https://script.google.com/macros/s/AKfycbzqGOke-7Zu_5qmsJHdiAdw9zP2aXfdLAn2U_vJEcld6dPv96ad6nqyciWynW_KVzwDIQ/exec" method="POST">
+      
+      <!-- ▶ 기본 정보 입력 영역 -->
+      <fieldset>
+        <legend>기본 정보</legend>
 
-    <label for="message">하고 싶은 말:</label><br>
-    <textarea id="message" name="message" required></textarea><br><br>
+        <!-- 사용자 이름 입력 -->
+        <label>이름:
+          <input type="text" name="name" placeholder="이름을 입력하세요" required>
+        </label>
 
-    <button type="submit">제출</button>
-  </form>
+        <!-- 이메일 입력 (형식 검증 포함) -->
+        <label>이메일:
+          <input type="email" name="email" placeholder="example@domain.com" required>
+        </label>
+
+        <!-- 학과 입력 (직접 입력 + 추천 목록 datalist) -->
+        <label>학과:
+          <input list="departments" name="department" placeholder="학과 선택 또는 입력">
+          <datalist id="departments">
+            <option value="사이버보안전공">
+            <option value="컴퓨터공학과">
+            <option value="디소공">
+          </datalist>
+        </label>
+      </fieldset>
+
+      <!-- ▶ 설문조사 입력 영역 -->
+      <fieldset>
+        <legend>설문</legend>
+
+        <!-- 체크박스: 사용한 기술 -->
+        <div class="form-group">
+          <label>사용한 기술:</label>
+          <label><input type="checkbox" name="tech" value="HTML"> HTML</label>
+          <label><input type="checkbox" name="tech" value="CSS"> CSS</label>
+          <label><input type="checkbox" name="tech" value="JavaScript"> JavaScript</label>
+        </div>
+
+        <!-- 라디오버튼: 팀 작업 여부 -->
+        <div class="form-group">
+          <label>팀 작업 여부:</label>
+          <label><input type="radio" name="team" value="yes"> 했음</label>
+          <label><input type="radio" name="team" value="no"> 안 했음</label>
+        </div>
+
+        <!-- 콤보박스: 만족도 선택 -->
+        <div class="form-group">
+          <label for="satisfaction">만족도:</label>
+          <select id="satisfaction" name="satisfaction">
+            <option value="5">매우 만족</option>
+            <option value="4">만족</option>
+            <option value="3">보통</option>
+            <option value="2">불만족</option>
+            <option value="1">매우 불만족</option>
+          </select>
+        </div>
+
+        <!-- 여러 줄 텍스트 입력: 피드백 -->
+        <label>피드백:
+          <textarea name="feedback" rows="4" placeholder="개선사항, 느낀 점 등을 자유롭게 작성해주세요."></textarea>
+        </label>
+      </fieldset>
+
+      <!-- 제출 버튼 -->
+      <button type="submit">제출</button>
+    </form>
+  </div>
 </body>
 </html>
